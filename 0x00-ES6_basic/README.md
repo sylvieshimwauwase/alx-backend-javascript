@@ -1,0 +1,1 @@
+this is a folder containing project about 0x00. ES6 Basics in javascript
