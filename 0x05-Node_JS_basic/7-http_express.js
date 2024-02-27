@@ -1,27 +1,26 @@
 const express = require('express');
-const fs = require('fs');
+const { countStudents } = require('./3-read_file_async');
 
 const app = express();
-const port = 1245;
 
 app.get('/', (req, res) => {
-  res.send('Hello Holberton School!');
+    res.send('Hello Holberton School!');
 });
 
 app.get('/students', (req, res) => {
-  const database = 'database.csv'; // Replace with the actual name of your database file
-  fs.readFile(database, 'utf8', (err, data) => {
-    if (err) {
-      res.send('Error reading database file');
-    } else {
-      const students = data.split('\n').filter((line) => line !== '');
-      res.send(`This is the list of our students:\n${students.join('\n')}`);
-    }
-  });
+    const databasePath = 'database.csv';
+    countStudents(databasePath)
+        .then(totalStudents => {
+            res.send(`This is the list of our students. Total number of students: ${totalStudents}`);
+        })
+        .catch(error => {
+            res.status(500).send(error.message);
+        });
 });
 
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+const PORT = 1245;
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}/`);
 });
 
 module.exports = app;
